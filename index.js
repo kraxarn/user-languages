@@ -1,5 +1,6 @@
 const content = document.getElementById("content")
 const colors = new Map()
+let limit = 30
 
 const languageColor = async () => {
 	const response = await fetch("https://raw.githubusercontent.com/github/linguist/master/lib/linguist/languages.yml")
@@ -29,7 +30,7 @@ const languageColor = async () => {
 }
 
 const load = async user => {
-	const response = await fetch(`https://api.github.com/users/${user}/repos?sort=updated&per_page=10`)
+	const response = await fetch(`https://api.github.com/users/${user}/repos?sort=updated&per_page=${limit}`)
 	const json = await response.json()
 
 	const languages = new Map()
@@ -58,6 +59,9 @@ const load = async user => {
 }
 
 const params = new URLSearchParams(location.search)
+if (params.has("limit")) {
+	limit = parseInt(params.get("limit"))
+}
 if (params.has("user")) {
 	languageColor().then(() => load(params.get("user")))
 } else {
