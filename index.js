@@ -47,6 +47,9 @@ const load = async user => {
 		const color = colors.has(language)
 			? colors.get(language)
 			: ""
+		if (!color && language !== "Other") {
+			console.warn("no color found for", language)
+		}
 		html += `<tr style="color: ${color}"><td>${language}:</td><td>${uses * 10}%</td></tr>`
 	})
 	html += "</table>"
