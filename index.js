@@ -51,7 +51,8 @@ const load = async user => {
 		if (!color && language !== "Other") {
 			console.warn("no color found for", language)
 		}
-		html += `<tr style="color: ${color}"><td>${language}:</td><td>${uses * 10}%</td></tr>`
+		const usage = Math.round(uses * (100 / limit) * 100) / 100
+		html += `<tr style="color: ${color}"><td>${language}:</td><td>${usage}%</td></tr>`
 	})
 	html += "</table>"
 
