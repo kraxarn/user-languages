@@ -28,32 +28,30 @@ const languageColor = async () => {
 	}
 }
 
-const load = user => {
-	fetch(`https://api.github.com/users/${user}/repos?sort=updated&per_page=10`)
-		.then(response => response.json())
-		.then(json => {
-			const languages = new Map()
-			json.map(item => item.language).forEach(language => {
-				if (!language) {
-					language = "Other"
-				}
-				languages.set(language, languages.has(language)
-					? languages.get(language) + 1
-					: 1)
-			})
+const load = async user => {
+	const response = await fetch(`https://api.github.com/users/${user}/repos?sort=updated&per_page=10`)
+	const json = await response.json()
 
-			let html = "<table>"
-			languages.forEach((uses, language) => {
-				const color = colors.has(language)
-					? colors.get(language)
-					: ""
-				html += `<tr style="color: ${color}"><td>${language}:</td><td>${uses * 10}%</td></tr>`
-			})
-			html += "</table>"
+	const languages = new Map()
+	json.map(item => item.language).forEach(language => {
+		if (!language) {
+			language = "Other"
+		}
+		languages.set(language, languages.has(language)
+			? languages.get(language) + 1
+			: 1)
+	})
 
-			content.innerHTML = html
-		})
-		.catch(err => content.textContent = err)
+	let html = "<table>"
+	languages.forEach((uses, language) => {
+		const color = colors.has(language)
+			? colors.get(language)
+			: ""
+		html += `<tr style="color: ${color}"><td>${language}:</td><td>${uses * 10}%</td></tr>`
+	})
+	html += "</table>"
+
+	content.innerHTML = html
 }
 
 const params = new URLSearchParams(location.search)
